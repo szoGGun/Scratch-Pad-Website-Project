@@ -1,36 +1,35 @@
-<html>
+<html lang="pl">
 
 <head>
+    <title>Notatnik</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css">
+    <link href="/public/style.css" rel="stylesheet">
 </head>
 
-<body>
-<div class="header">
-    <h1>Moje notatki</h1>
-</div>
-
-<div class="container">
-    <div class="menu">
-        <ul>
-            <li>
-                <a href="/">Lista notatek</a>
-            </li>
-            <li>
-                <a href="/?action=create">Nowa notatka</a>
-            </li>
-        </ul>
+<body class="body">
+<div class="wrapper">
+    <div class="header">
+        <h1><i class="far fa-clipboard"></i>Scratch pad</h1>
     </div>
 
-    <div>
-        <?php
-        include_once("templates/pages/$page.php");
-        ?>
+    <div class="container">
+        <div class="menu">
+            <ul>
+                <li><a href="/">Home page</a></li>
+                <li><a href="/?action=create">New note</a></li>
+            </ul>
+        </div>
+
+        <div class="page">
+            <?php require_once("templates/pages/$page.php"); ?>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>PHP Project - Notepad</p>
     </div>
 </div>
-
-<div class="footer">
-    STOPKA
-</div>
-
 </body>
 
 </html>
