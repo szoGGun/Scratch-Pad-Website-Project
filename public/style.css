@@ -211,14 +211,14 @@ table {
 
 .tbl-header {
     margin-top: 20px;
-    background-color: cadetblue;
+    background-color: #420a55;
     color: white;
 }
 
 .tbl-content {
     overflow-x: auto;
     margin-top: 0px;
-    border: 3px solid cadetblue;
+    border: 3px solid #420a55;
     color: #222;
     background-color: white;
 }
@@ -310,7 +310,7 @@ tr > td:nth-child(3) {
 
 button {
     border: none;
-    background-color: cadetblue;
+    background-color: #420a55;
     padding: 5px 10px;
     color: white;
     cursor: pointer;
