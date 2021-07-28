@@ -72,6 +72,7 @@ class Database
 
             $this->conn->exec($query);
         } catch (Throwable $e) {
+            dump($e);
             throw new StorageException('Cannot create new note', 400, $e);
         }
     }
