@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-require_once("Exception/StorageException.php");
-require_once("Exception/NotFoundException.php");
-
 use App\Exception\ConfigurationException;
 use App\Exception\StorageException;
 use App\Exception\NotFoundException;
@@ -72,7 +69,6 @@ class Database
 
             $this->conn->exec($query);
         } catch (Throwable $e) {
-            dump($e);
             throw new StorageException('Cannot create new note', 400, $e);
         }
     }
