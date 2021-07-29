@@ -35,7 +35,7 @@ class Database
             throw new StorageException('Cannot download note', 400, $e);
         }
 
-        if(!$note) {
+        if (!$note) {
             throw new NotFoundException("There is no note with id: $id");
         }
 
@@ -70,6 +70,25 @@ class Database
             $this->conn->exec($query);
         } catch (Throwable $e) {
             throw new StorageException('Cannot create new note', 400, $e);
+        }
+    }
+
+    public function editNote(int $id, array $data): void
+    {
+        try{
+            $title = $this->conn->quote($data['title']);
+            $content = $this->conn->quote($data['content']);
+
+            $query = "
+            UPDATE notes
+            SET title = $title, content = $content
+            WHERE id = $id;
+            ";
+
+            $this->conn->exec($query);
+        } catch (Throwable $e){
+            dump($e);
+            throw new StorageException('Cannot edit note', 400, $e);
         }
     }
 

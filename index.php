@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 spl_autoload_register(function (string $ClassNamespace) {
-    $path = str_replace(['\\', 'App'], ['/', ''], $ClassNamespace);
+    $path = str_replace(['\\', 'App/'], ['/', ''], $ClassNamespace);
     $path = "src/$path.php";
     require_once($path);
 });
@@ -19,8 +19,7 @@ use App\Exception\ConfigurationException;
 
 
 
-$request = new Request($_GET, $_POST);
-
+$request = new Request($_GET, $_POST, $_SERVER);
 try {
     AbstractController::initConfiguration($configuration);
 
