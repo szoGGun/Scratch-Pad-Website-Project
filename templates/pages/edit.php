@@ -2,8 +2,7 @@
     <h3> Editing note </h3>
     <div>
         <?php if (!empty($params['note'])): ?>
-            <?php dump($params);
-            $note = $params['note']; ?>
+            <?php $note = $params['note']; ?>
             <form class="note-form" action="/?action=edit" method="post">
                 <input name="id" type="hidden" value="<?php echo $note['id'] ?>">
                 <ul>
