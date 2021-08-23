@@ -4,81 +4,115 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Exception\NotFoundException;
-
 class NoteController extends AbstractController
 {
-    public function createAction()
+    private const PAGE_SIZE = 10;
+
+    public function createAction(): void
     {
         if ($this->request->hasPosted()) {
             $noteData = [
                 'title' => $this->request->postParam('title'),
                 'content' => $this->request->postParam('content')
             ];
-            $this->database->createNote($noteData);
+            $this->noteModel->create($noteData);
             $this->redirect('/', ['before' => 'created']);
         }
 
         $this->view->render('create');
     }
 
-    public function showAction()
+    public function showAction(): void
     {
-        $noteId = (int)$this->request->getParam('id');
-
-        if (!$noteId) {
-            $this->redirect('/', ['error' => 'missingNodeId']);
-        }
-
-        try {
-            $note = $this->database->getNote($noteId);
-        } catch (NotFoundException $e) {
-            $this->redirect('/', ['error' => 'noteNotFound']);
-        }
 
         $this->view->render(
             'show',
-            ['note' => $note]
+            ['note' => $this->getNote()]
         );
     }
 
-    public function listAction()
+    public function listAction(): void
     {
+        $phrase = $this->request->getParam('phrase');
+        $pageNumber = (int) $this->request->getParam('page', 1);
+        $pageSize = (int) $this->request->getParam('pagesize', self::PAGE_SIZE);
+        $sortBy = $this->request->getParam('sortby', 'title');
+        $sortOrder = $this->request->getParam('sortorder', 'desc');
+
+        if (!in_array($pageSize, [1, 5, 10, 25])) {
+            $pageSize = self::PAGE_SIZE;
+        }
+
+        if($phrase) {
+            $noteList = $this->noteModel->search($phrase, $pageNumber, $pageSize, $sortBy, $sortOrder);
+            $notes = $this->noteModel->searchCount($phrase);
+        } else {
+            $noteList = $this->noteModel->list($pageNumber, $pageSize, $sortBy, $sortOrder);
+            $notes = $this->noteModel->count();
+        }
+
         $this->view->render(
             'list',
             [
-                'notes' => $this->database->getNotes(),
+                'page' => [
+                    'number' => $pageNumber,
+                    'size' => $pageSize,
+                    'pages' => (int) ceil($notes / $pageSize)
+                    ],
+                'phrase' => $phrase,
+                'sort' => ['by' => $sortBy, 'order' => $sortOrder],
+                'notes' => $noteList,
                 'before' => $this->request->getParam('before'),
                 'error' => $this->request->getParam('error')
             ]
         );
     }
 
-    public function editAction()
+    public function editAction(): void
 
         // TODO add date change after edit
     {
         if ($this->request->isPost()) {
-            $noteId = (int) $this->request->postParam('id');
+            $noteId = (int)$this->request->postParam('id');
             $noteData = [
                 'title' => $this->request->postParam('title'),
                 'content' => $this->request->postParam('content')
             ];
-            $this->database->editNote($noteId, $noteData);
+            $this->noteModel->edit($noteId, $noteData);
             $this->redirect('/', ['before' => 'edited']);
         }
 
+        $note = $this->getNote();
+
+        $this->view->render(
+            'edit',
+            ['note' => $this->getNote()]
+        );
+    }
+
+    public function deleteAction(): void
+    {
+        if ($this->request->isPost()) {
+            $id = (int)$this->request->postParam('id');
+            $this->noteModel->delete($id);
+            $this->redirect('/', ['before' => 'deleted']);
+        }
+
+        $this->view->render(
+            'delete',
+            ['note' => $this->getNote()]
+        );
+    }
+
+    private function getNote(): array
+    {
         $noteId = (int)$this->request->getParam('id');
         if (!$noteId) {
             $this->redirect('/', ['error' => 'missingNodeId']);
         }
 
-        try {
-            $note = $this->database->getNote($noteId);
-        } catch (NotFoundException $e) {
-            $this->redirect('/', ['error' => 'noteNotFound']);
-        }
+        $note = $this->noteModel->get($noteId);
 
-        $this->view->render('edit', ['note' => $note]);
+        return $note;
     }
 }
