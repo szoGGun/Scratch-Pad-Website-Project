@@ -5,7 +5,7 @@
             <ul>
                 <li>
                     <label>Title<span class="required">*</span></label>
-                    <input type="text" name="title" class="field-long"/>
+                    <input type="text" name="title" class="field-long" required/>
                 </li>
                 <li>
                     <label>Content</label>

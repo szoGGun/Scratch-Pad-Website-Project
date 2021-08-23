@@ -4,7 +4,7 @@
     <ul>
         <li>Id <?php echo $note['id'] ?></li>
         <li>Title: <?php echo $note['title'] ?></li>
-        <li><?php echo $note['content'] ?></li>
+        <li>Content: <?php echo $note['content'] ?></li>
         <li>Created: <?php echo $note['created'] ?></li>
     </ul>
     <a href="/?action=edit&id=<?php echo $note['id']?>">

@@ -47,7 +47,7 @@
         <div>
             <form class="settings-form" action="/" method="GET">
                 <div>
-                    <label>Search: <input type="text" name="phrase" value="<?php echo $phrase?>" /></label>
+                    <label>Search by title: <input type="text" name="phrase" value="<?php echo $phrase?>" /></label>
                 </div>
                 <div>
                     <div>Sort by:</div>
@@ -58,10 +58,10 @@
                 </div>
                 <div>
                     <div>Sort order:</div>
-                    <label>Ascending <input name="sortOrder" type="radio"
-                                            value="asc" <?php echo $order === 'asc' ? 'checked' : '' ?>/></label>
-                    <label>Descending <input name="sortOrder" type="radio"
+                    <label>Descending <input name="sortorder" type="radio"
                                              value="desc" <?php echo $order === 'desc' ? 'checked' : '' ?>/></label>
+                    <label>Ascending <input name="  sortorder" type="radio"
+                                            value="asc" <?php echo $order === 'asc' ? 'checked' : '' ?>/></label>
                 </div>
                 <div>
                     <div>Number of notes on page</div>
