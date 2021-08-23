@@ -53,7 +53,8 @@
                     <div>Sort by:</div>
                     <label>Title<input name="sortby" type="radio"
                                        value="title" <?php echo $by === 'title' ? 'checked' : '' ?> /></label>
-                    <label>Date<input name="sortby" type="radio" value="created"<?php echo $by === 'created' ? 'checked' : '' ?> /></label>
+                    <label>Date<input name="sortby" type="radio"
+                                      value="created"<?php echo $by === 'created' ? 'checked' : '' ?> /></label>
                 </div>
                 <div>
                     <div>Sort order:</div>
@@ -113,7 +114,7 @@
         </div>
 
         <?php
-        $paginationUrl = "&phrase=$phrase&pagesize=$size?sortby=$by&sortorder=$order"; ?>
+        $paginationUrl = "&phrase=$phrase&pagesize=$size&sortby=$by&sortorder=$order"; ?>
         <ul class="pagination">
             <?php if ($currentPage !== 1): ?>
             <li>
