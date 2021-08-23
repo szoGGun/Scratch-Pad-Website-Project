@@ -51,16 +51,15 @@
                 </div>
                 <div>
                     <div>Sort by:</div>
-                    <label>Title<input name="sortBy" type="radio"
+                    <label>Title<input name="sortby" type="radio"
                                        value="title" <?php echo $by === 'title' ? 'checked' : '' ?> /></label>
-                    <label>Date<input name="sortBy" type="radio"
-                                      value="created"<?php echo $by === 'created' ? 'checked' : '' ?> /></label>
+                    <label>Date<input name="sortby" type="radio" value="created"<?php echo $by === 'created' ? 'checked' : '' ?> /></label>
                 </div>
                 <div>
                     <div>Sort order:</div>
                     <label>Descending <input name="sortorder" type="radio"
                                              value="desc" <?php echo $order === 'desc' ? 'checked' : '' ?>/></label>
-                    <label>Ascending <input name="  sortorder" type="radio"
+                    <label>Ascending <input name="sortorder" type="radio"
                                             value="asc" <?php echo $order === 'asc' ? 'checked' : '' ?>/></label>
                 </div>
                 <div>
