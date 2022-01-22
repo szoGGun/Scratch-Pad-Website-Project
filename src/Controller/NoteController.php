@@ -115,4 +115,31 @@ class NoteController extends AbstractController
 
         return $note;
     }
+
+    public function registerAction(): void
+    {
+        if ($this->request->hasPosted()) {
+            $loginData = [
+                'username' => $this->request->postParam('username'),
+                'email' => $this->request->postParam('email'),
+                'password' => $this->request->postParam('password'),
+            ];
+            $this->noteModel->register($loginData);
+        }
+
+        $this->view->render('register');
+    }
+
+    public function loginAction(): void
+    {
+        if ($this->request->hasPosted()) {
+            $loginData = [
+                'username' => $this->request->postParam('username'),
+                'password' => $this->request->postParam('password'),
+            ];
+            $this->noteModel->login($loginData);
+        }
+
+        $this->view->render('login');
+    }
 }

@@ -1,6 +1,9 @@
 <?php
 
 declare(strict_types=1);
+session_start();
+
+echo "session data " . $_SESSION["user_login"] . ".<br>";
 
 spl_autoload_register(function (string $ClassNamespace) {
     $path = str_replace(['\\', 'App/'], ['/', ''], $ClassNamespace);

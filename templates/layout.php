@@ -18,6 +18,9 @@
             <ul>
                 <li><a href="/">Home page</a></li>
                 <li><a href="/?action=create">New note</a></li>
+                <li><a href="/?action=register">Register</a></li>
+                <li><a href="/?action=login">Login</a></li>
+                <li><a href="/?action=logout">Logout</a></li>
             </ul>
         </div>
 
@@ -31,5 +34,4 @@
     </div>
 </div>
 </body>
-
 </html>

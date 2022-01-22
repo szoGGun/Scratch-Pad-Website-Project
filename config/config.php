@@ -9,5 +9,5 @@ return [
         'database' => 'q333xdd1huxfl0hq',
         'user' => 'y3p4bsywft2j9q45',
         'password' => 'ujum4j4b30dg6hcr'
-    ]
+    ]   
 ];

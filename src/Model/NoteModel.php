@@ -135,6 +135,70 @@ class NoteModel extends AbstractModel implements ModelInterface
         }
     }
 
+    public function register(array $data): void
+    {
+        {
+            try {
+                $username = $this->conn->quote($data['username']);
+                $email = $this->conn->quote($data['email']);
+                $password = $this->conn->quote($data['password']);
+
+                $query = "INSERT INTO users(login, email, password)
+                VALUES($username, $email, $password)
+                ";
+
+                if ($_POST['password'] != $_POST['password2']) {
+                    echo("Oops! Password did not match! Try again. ");
+                } else if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    dump($email);
+                    echo("Email is not valid");
+                } else {
+                    echo("User registered");
+                    $this->conn->exec($query);
+                }
+
+            } catch (Throwable $e) {
+                throw new StorageException('Cannot register user', 400, $e);
+            }
+        }
+    }
+
+    public function login(array $data): void
+    {
+        try {
+            session_start();
+
+            if(isset($SESSION["user_login"])){
+                header("index.php");
+            }
+
+            $username = $this->conn->quote($data['username']);
+            $password = $this->conn->quote($data['password']);
+
+            if ($username != "" && $password != "") {
+                try {
+                    $query = "SELECT * FROM users WHERE login = $username AND password = $password";
+                    $result = $this->conn->query($query);
+                    $row = $result->fetch(PDO::FETCH_ASSOC);
+                    $count = $result->rowCount();
+                    if ($count == 1 && !empty($row)) {
+                        $_SESSION["user_login"] = $row["usersID"];
+                        header("refresh:2; index.php");
+                    } else {
+                        dump("Brak użytkownika");
+                    }
+                } catch (PDOException $e) {
+                    echo "Error : " . $e->getMessage();
+                }
+            } else {
+                $msg = "Both fields are required!";
+            }
+        } catch (Throwable $e) {
+            throw new StorageException('Cannot login user', 400, $e);
+        }
+    }
+
+
     private function findBy(
         ?string $phrase,
         int     $pageNumber,
@@ -164,7 +228,7 @@ class NoteModel extends AbstractModel implements ModelInterface
 
 
                 $query = "
-                SELECT id, title, created
+                    SELECT id, title, created
                 FROM notes 
                 $wherePart
                 ORDER BY $sortBy $sortOrder

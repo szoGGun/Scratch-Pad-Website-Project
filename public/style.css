@@ -58,6 +58,7 @@ form input[type=search],
 form input[type=time],
 form input[type=url],
 form input[type=email],
+form input[type=password],
 textarea,
 select {
     box-sizing: border-box;
