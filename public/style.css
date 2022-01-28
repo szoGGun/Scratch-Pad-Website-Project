@@ -20,7 +20,7 @@ body {
 
 h1 {
     font-size: 44px;
-    color: #fff;
+    color: #ffffff;
     text-transform: uppercase;
     text-align: center;
 }
@@ -345,4 +345,9 @@ form.note-form textarea {
 .delete button,
 .show button {
     padding: 8px 12px;
+}
+
+h1.headertekst {
+    text-align: center;
+    color: red;
 }

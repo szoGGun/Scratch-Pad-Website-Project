@@ -17,10 +17,17 @@
         <div class="menu">
             <ul>
                 <li><a href="/">Home page</a></li>
+                <?php if (isset($_SESSION['loggedin'])): ?>
                 <li><a href="/?action=create">New note</a></li>
+                <?php endif;?>
                 <li><a href="/?action=register">Register</a></li>
                 <li><a href="/?action=login">Login</a></li>
+                <?php if (isset($_SESSION['loggedin'])): ?>
                 <li><a href="/?action=logout">Logout</a></li>
+                <?php endif;?>
+                <?php if (isset($_SESSION['role'])): ?>
+                <li><a href="/?action=admin">Admin Panel</a></li>
+                <?php endif;?>
             </ul>
         </div>
 

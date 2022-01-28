@@ -1,13 +1,13 @@
 <div class="show">
-    <?php $note = $params['note'] ?? null; ?>
-    <?php if ($note): ?>
+    <?php $notes = $params['notes'] ?? null; ?>
+    <?php if ($notes): ?>
     <ul>
-        <li>Id <?php echo $note['id'] ?></li>
-        <li>Title: <?php echo $note['title'] ?></li>
-        <li>Content: <?php echo $note['content'] ?></li>
-        <li>Created: <?php echo $note['created'] ?></li>
+        <li>Id <?php echo $notes['id'] ?></li>
+        <li>Title: <?php echo $notes['title'] ?></li>
+        <li>Content: <?php echo $notes['content'] ?></li>
+        <li>Created: <?php echo $notes['created'] ?></li>
     </ul>
-    <a href="/?action=edit&id=<?php echo $note['id']?>">
+    <a href="/?action=edit&id=<?php echo $notes['id']?>">
        <button>Edit</button>
     </a>
     <?php else: ?>

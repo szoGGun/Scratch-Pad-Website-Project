@@ -27,7 +27,7 @@ class NoteController extends AbstractController
 
         $this->view->render(
             'show',
-            ['note' => $this->getNote()]
+            ['notes' => $this->getNote()]
         );
     }
 
@@ -63,7 +63,7 @@ class NoteController extends AbstractController
                 'sort' => ['by' => $sortBy, 'order' => $sortOrder],
                 'notes' => $noteList,
                 'before' => $this->request->getParam('before'),
-                'error' => $this->request->getParam('error')
+                'error' => $this->request->getParam('error'),
             ]
         );
     }
@@ -86,7 +86,7 @@ class NoteController extends AbstractController
 
         $this->view->render(
             'edit',
-            ['note' => $this->getNote()]
+            ['notes' => $this->getNote()]
         );
     }
 
@@ -100,7 +100,7 @@ class NoteController extends AbstractController
 
         $this->view->render(
             'delete',
-            ['note' => $this->getNote()]
+            ['notes' => $this->getNote()]
         );
     }
 
@@ -141,5 +141,22 @@ class NoteController extends AbstractController
         }
 
         $this->view->render('login');
+    }
+
+    public function logoutAction(): void
+    {
+        $this->view->render('logout');
+    }
+
+    public function adminAction(): void
+    {
+        $usersList = $this->noteModel->admin();
+
+        $this->view->render(
+            'admin',
+            [
+                'users' => $usersList,
+            ]
+        );
     }
 }

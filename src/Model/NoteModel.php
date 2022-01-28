@@ -95,9 +95,10 @@ class NoteModel extends AbstractModel implements ModelInterface
             $title = $this->conn->quote($data['title']);
             $content = $this->conn->quote($data['content']);
             $created = $this->conn->quote(date('Y-m-d H:i:s'));
+            $usersID = $this->conn->quote($_SESSION["user_login"]);
 
-            $query = "INSERT INTO notes(title, content, created)
-            VALUES($title, $content, $created)
+            $query = "INSERT INTO notes(title, content, created, usersID)
+            VALUES($title, $content, $created, $usersID)
             ";
 
             $this->conn->exec($query);
@@ -143,17 +144,30 @@ class NoteModel extends AbstractModel implements ModelInterface
                 $email = $this->conn->quote($data['email']);
                 $password = $this->conn->quote($data['password']);
 
+                $query2 = "SELECT * FROM users";
+                $result = $this->conn->query($query2);
+                $row = $result->fetch(PDO::FETCH_ASSOC);
+
                 $query = "INSERT INTO users(login, email, password)
                 VALUES($username, $email, $password)
                 ";
 
-                if ($_POST['password'] != $_POST['password2']) {
-                    echo("Oops! Password did not match! Try again. ");
+                $allOK=true;
+
+                if($row['login'] == $_POST['username']){
+                    $allOK = false;
+                    $_SESSION['e_usr'] = ("Username taken");
+                } else if ($_POST['password'] != $_POST['password2']) {
+                    $allOK = false;
+                    $_SESSION['e_pas'] = ("Oops! Password did not match! Try again. ");
+                } else if($row['email'] == $_POST['email']){
+                    $allOK = false;
+                    $_SESSION['e_ema'] = ("Email already used");
                 } else if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    dump($email);
-                    echo("Email is not valid");
+                    $allOK = false;
+                    $_SESSION['e_ema'] = ("Email is not valid");
                 } else {
-                    echo("User registered");
+                    $_SESSION['e_git'] = ("User registered");
                     $this->conn->exec($query);
                 }
 
@@ -166,9 +180,8 @@ class NoteModel extends AbstractModel implements ModelInterface
     public function login(array $data): void
     {
         try {
-            session_start();
 
-            if(isset($SESSION["user_login"])){
+            if (isset($SESSION["user_login"])) {
                 header("index.php");
             }
 
@@ -177,13 +190,20 @@ class NoteModel extends AbstractModel implements ModelInterface
 
             if ($username != "" && $password != "") {
                 try {
-                    $query = "SELECT * FROM users WHERE login = $username AND password = $password";
+                    $query = "SELECT `users`.*, `UserRoles`.* FROM `users` 
+                              LEFT JOIN `UserRoles` ON `UserRoles`.`usersID` = `users`.`usersID` 
+                              WHERE `users`.`login` = $username AND `users`.`password` = $password;";
                     $result = $this->conn->query($query);
                     $row = $result->fetch(PDO::FETCH_ASSOC);
                     $count = $result->rowCount();
+
                     if ($count == 1 && !empty($row)) {
+                        if ($row['roleID'] == 2){
+                            $_SESSION["role"] = $row['roleID'];
+                        }
                         $_SESSION["user_login"] = $row["usersID"];
-                        header("refresh:2; index.php");
+                        $_SESSION['loggedin'] = true;
+                        header("refresh:0; index.php");
                     } else {
                         dump("Brak użytkownika");
                     }
@@ -228,11 +248,11 @@ class NoteModel extends AbstractModel implements ModelInterface
 
 
                 $query = "
-                    SELECT id, title, created
+                    SELECT *
                 FROM notes 
                 $wherePart
                 ORDER BY $sortBy $sortOrder
-                LIMIT $offset, $limit
+                LIMIT $offset, $limit  
                 ";
                 $result = $this->conn->query($query);
                 return $result->fetchAll(PDO::FETCH_ASSOC);
@@ -240,5 +260,13 @@ class NoteModel extends AbstractModel implements ModelInterface
                 throw new StorageException('Cannot download notes', 400, $e);
             }
         }
+    }
+
+    public function admin(){
+        $query = "
+                    SELECT *
+                FROM users ";
+        $result = $this->conn->query($query);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 }
