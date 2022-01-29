@@ -152,6 +152,8 @@ class NoteModel extends AbstractModel implements ModelInterface
                 VALUES($username, $email, $password)
                 ";
 
+
+
                 $allOK=true;
 
                 if($row['login'] == $_POST['username']){
@@ -169,6 +171,9 @@ class NoteModel extends AbstractModel implements ModelInterface
                 } else {
                     $_SESSION['e_git'] = ("User registered");
                     $this->conn->exec($query);
+                    $newUserID = $this->conn->lastInsertId();
+                    $query3 = "INSERT INTO UserRoles(usersID,roleID) VALUES ($newUserID, 1)";
+                    $this->conn->exec($query3);
                 }
 
             } catch (Throwable $e) {
