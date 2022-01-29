@@ -12,6 +12,7 @@
                 </li>
                 <li>
                     <input type="submit" value="Login"/>
+                    <?php if (isset($_SESSION['e_log'])){ echo $_SESSION['e_log']; unset($_SESSION['e_log']);}?>
                 </li>
             </ul>
         </form>

@@ -210,7 +210,7 @@ class NoteModel extends AbstractModel implements ModelInterface
                         $_SESSION['loggedin'] = true;
                         header("refresh:0; index.php");
                     } else {
-                        dump("Brak użytkownika");
+                        $_SESSION['e_log'] = ("Brak użytkownika lub błędne hasło");
                     }
                 } catch (PDOException $e) {
                     echo "Error : " . $e->getMessage();
