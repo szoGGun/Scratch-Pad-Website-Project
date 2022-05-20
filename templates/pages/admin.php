@@ -51,8 +51,12 @@
                                     <td><?php echo $users['email'] ?></td>
                                     <td><?php echo $users['password']?></td>
                                     <td>
-                                        <a href="/?action=deleteAdmin&id=<?php echo $users['usersID'] ?>">
-                                            <button>Delete</button>
+                                        <form method="POST" action="/?action=deleteAdmin">
+                                            <input name="id" type="hidden" value="<?php echo $users["usersID"] ?>" />
+                                            <input type="submit" value="deleteAdmin">
+                                        </form>
+                                        <a href="/?action=edit&id=<?php echo $users['usersID']?>">
+                                            <button>Edit</button>
                                         </a>
                                     </td>
                                 </tr>

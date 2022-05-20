@@ -18,6 +18,7 @@ abstract class AbstractController
     private static array $configuration = [];
 
     protected NoteModel $noteModel;
+    protected NoteModel $userModel;
     protected Request $request;
     protected View $view;
 

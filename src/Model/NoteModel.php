@@ -267,11 +267,70 @@ class NoteModel extends AbstractModel implements ModelInterface
         }
     }
 
-    public function admin(){
+    public function upload(){
+                $targetDir = "uploads/";
+                $fileName = basename($_FILES["file"]["name"]);
+                $targetFilePath = $targetDir . $fileName;
+                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+
+                if(isset($_POST["submit"]) && !empty($_FILES["file"]["name"])){
+                    $allowTypes = array('jpg','png','jpeg','gif','pdf');
+                    if(in_array($fileType, $allowTypes)){
+                        if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)){
+                                $statusMsg = "The file ".$fileName. " has been uploaded successfully.";
+                            }else{
+                                $statusMsg = "File upload failed, please try again.";
+                            }
+                }
+                echo $statusMsg;
+        }
+    }
+
+    public function contact(array $data): void
+    {
+        try {
+            $email = $this->conn->quote($data['email']);
+            $topic = $this->conn->quote($data['topic']);
+            $question = $this->conn->quote($data['question']);
+            $usersID = $this->conn->quote($_SESSION["user_login"]);
+
+            $_SESSION['c_git'] = ("Message send");
+            $query = "INSERT INTO questions(email, topic, question, usersID)
+            VALUES($email, $topic, $question, $usersID)
+            ";
+
+            $this->conn->exec($query);
+        } catch (Throwable $e) {
+            throw new StorageException('Cannot create new contact request', 400, $e);
+        }
+    }
+
+    public function messages()
+    {
         $query = "
                     SELECT *
-                FROM users ";
+                FROM questions";
         $result = $this->conn->query($query);
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function admin(){
+        $query = "
+                    SELECT *
+                FROM users";
+        $result = $this->conn->query($query);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function deleteAdmin(int $id): void
+    {
+        try {
+            $query = "DELETE FROM users WHERE usersID = $id LIMIT 1";
+            $this->conn->exec($query);
+        } catch (Throwable $e) {
+            throw new StorageException('Cannot delete user', 400, $e);
+        }
+    }
+
+
 }

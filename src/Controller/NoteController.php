@@ -148,6 +148,55 @@ class NoteController extends AbstractController
         $this->view->render('logout');
     }
 
+    public function uploadAction(): void
+    {
+        if ($this->request->hasPosted()) {
+            $data = [
+                'file' => $this->request->postParam('file'),
+            ];
+            $this->noteModel->upload($data);
+        }
+
+        $this->view->render('upload');
+    }
+
+    public function galleryAction(): void
+    {
+        $this->view->render(
+            'gallery',
+            [
+
+            ]
+        );
+    }
+
+    public function contactAction(): void
+    {
+        if ($this->request->hasPosted()) {
+            $contactData = [
+                'email' => $this->request->postParam('email'),
+                'topic' => $this->request->postParam('topic'),
+                'question' => $this->request->postParam('question')
+            ];
+            $this->noteModel->contact($contactData);
+        }
+
+        $this->view->render('contact');
+    }
+
+    public function messagesAction(): void
+    {
+        $messages = $this->noteModel->messages();
+
+        $this->view->render(
+            'messages',
+            [
+                'questions' => $messages,
+                'beforeQuestions' => $this->request->getParam('beforeQuestions')
+            ]
+        );
+    }
+
     public function adminAction(): void
     {
         $usersList = $this->noteModel->admin();
@@ -156,7 +205,17 @@ class NoteController extends AbstractController
             'admin',
             [
                 'users' => $usersList,
+                'beforeAdmin' => $this->request->getParam('beforeAdmin')
             ]
         );
+    }
+
+    public function deleteAdminAction(): void
+    {
+        if ($this->request->isPost()) {
+            $usersID = (int)$this->request->postParam('usersID');
+            $this->noteModel->deleteAdmin($usersID);
+            $this->redirect('/', ['beforeAdmin' => 'deleted']);
+        }
     }
 }
